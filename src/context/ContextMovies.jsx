@@ -17,15 +17,12 @@ const ContextMovies = () => {
             };
             const response = await fetch(url, options);
             const data = await response.json();
-            console.log(data[0]);
+            console.log(data);
 
             setShows(
                 data
             )
-            setStreams(
-                data[0].streamingOptions
-            )
-            setCards()
+
         } catch (error) {
             console.error(error);
         }
@@ -33,38 +30,36 @@ const ContextMovies = () => {
 
     useEffect(()=>{
         Shows()
-        
     },[])
     
   return (
-    <div>
+    <div className='bg-blue-500'>
         <h1 className='text-4xl'>All Shows</h1>
         <hr />
+        <div >
         {
             shows.map((show, index)=>(
-                <div key={index}>
-                    <p>title:{show.title} </p>
-                    <p>image: <img src={show.imageSet.verticalPoster.w720} alt="" /></p>
-                    <p>Overview: {show.overview}</p>
-                    <p>release year: {show.releaseYear}</p>
-                    <p>time: {show.runtime} minutes</p>
-                    <p>Genres: {show.genres[0].name}, {show.genres[1].name}</p>
-                    <p>rating:{show.rating}</p>
+                <div className='bg-white m-2' key={index}>
+                    <p><img className='w-20 h-20' src={show.imageSet.verticalPoster.w720} alt="" /></p>
+                    <p>{show.title} [{show.genres[0].name}, {show.genres[1].name}]</p>
+                    <p>Description: {show.overview}</p>
+                    <p>Release Year: {show.releaseYear}</p>
+                    <p>Duration: {show.runtime} minutes</p>
 
 
                     <div>
                         <h1 className="text-sm underline text-amber-300">Where to stream:</h1>
-                        <div className=''>
+                        <div className='flex flex-col sm:flex-row '>
                         {
                             show.streamingOptions?.us?.length > 0 ? (
                                 show.streamingOptions.us.map((streamingSite, index1) => (
-                                    <div key={index1}>
-                                        <p>{streamingSite.service.name || "Unknown Platform"} <img src={streamingSite.service.imageSet.lightThemeImage} alt="" /></p>
-                                        <p>
-                                            <a className='bg-blue-500' href={streamingSite.videoLink || "Unknown Platform"}>Watch</a>
+                                    <div className='flex items-center' key={index1}>
+                                        <p><img src={streamingSite.service.imageSet.lightThemeImage} alt="" /></p>
+                                        <p className='p-2 '>
+                                            <a  className='bg-blue-500 p-1 rounded-full' href={streamingSite.videoLink || "Unknown Platform"}>Watch</a>
                                         </p>
                                     </div>
-                                ))
+                                )).slice(0,2)
                             ) : (
                                 <p>No streaming options available</p>
                             )
@@ -73,8 +68,8 @@ const ContextMovies = () => {
 
                 </div>
             )).slice(0,10)
-
-        }      
+        }  
+        </div>
     </div>
   )
 }
